@@ -70,6 +70,70 @@ TYPE_MODE = [
     MODE_SAME,  # 0xF JOKER_BOMB
 ]
 
+
+def to_core(r):
+    return r - 2
+
+
+def mask5(a, b, c, d, e):
+    return (1 << (a - 2)) | (1 << (b - 2)) | (1 << (c - 2)) | (1 << (d - 2)) | (1 << (e - 2))
+
+
+STRAIGHT_TABLE = {
+    mask5(14, 2, 3, 4, 5): to_core(3),
+    mask5(2, 3, 4, 5, 6): to_core(4),
+    mask5(3, 4, 5, 6, 7): to_core(5),
+    mask5(4, 5, 6, 7, 8): to_core(6),
+    mask5(5, 6, 7, 8, 9): to_core(7),
+    mask5(6, 7, 8, 9, 10): to_core(8),
+    mask5(7, 8, 9, 10, 11): to_core(9),
+    mask5(8, 9, 10, 11, 12): to_core(10),
+    mask5(9, 10, 11, 12, 13): to_core(11),
+    mask5(10, 11, 12, 13, 14): to_core(12),
+}
+
+
+def build_code(type_code: int, ranks: list[int], level_rank: int = 0) -> int:
+    if type_code == TYPE_PASS:
+        return 0
+
+    mode = TYPE_MODE[type_code]
+
+    if mode in (MODE_STRAIGHT, MODE_PAIR_CHAIN, MODE_STEEL) and level_rank != 0 and 15 in ranks:
+        processed = [level_rank if r == 15 else r for r in ranks]
+    else:
+        processed = ranks
+
+    if mode == MODE_SAME:
+        core = to_core(processed[0])
+
+    elif mode == MODE_TRIPLE_PAIR:
+        a, b, c, d, e = processed
+        if a == b == c:
+            core = to_core(a)
+        elif b == c == d:
+            core = to_core(b)
+        else:
+            core = to_core(c)
+
+    elif mode == MODE_STRAIGHT:
+        a, b, c, d, e = processed
+        mask = ((1 << (a - 2)) | (1 << (b - 2)) | (1 << (c - 2)) |
+                (1 << (d - 2)) | (1 << (e - 2)))
+        core = STRAIGHT_TABLE[mask]
+
+    elif mode == MODE_PAIR_CHAIN:
+        core = to_core(processed[2])
+
+    elif mode == MODE_STEEL:
+        core = to_core(processed[3])
+
+    else:
+        raise ValueError(f"unexpected mode: {mode}")
+
+    return (type_code << 4) | core
+
+
 def can_beat(a: int, b: int) -> bool:
     ta = a >> 4
     tb = b >> 4
@@ -78,6 +142,7 @@ def can_beat(a: int, b: int) -> bool:
     if ta >= 8:
         return tb < 8 or ta > tb
     return False
+
 
 def can_beat_easy(a: int, b: int) -> bool:
     # ta = a >> 4
