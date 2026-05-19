@@ -1,6 +1,6 @@
 # BitGuanDan
 
-This repository contains the core logic for representing and comparing cards in **GuanDan (掼蛋)** using compact 8-bit encoding.
+This repository contains the world's fastest and most compact **GuanDan (掼蛋) card comparator**, based on 8-bit encoding with high-performance bitwise comparison.
 
 <img width="1306" height="1204" alt="BitGuandan" src="https://github.com/user-attachments/assets/6fc84067-3ac2-43ef-aacf-4ca914b1ce1c" />
 
