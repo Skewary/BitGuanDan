@@ -1,6 +1,7 @@
 # BitGuanDan
 
 This repository contains the core logic for representing and comparing cards in **GuanDan (掼蛋)** using compact 8-bit encoding.
+![Uploading BitGuandan.png…]()
 
 ## 核心思路
 
