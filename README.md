@@ -71,7 +71,15 @@ This repository contains the core logic for representing and comparing cards in 
    * **高效**：位运算快速判断大小
    * **可扩展**：新牌型可直接扩展枚举，无需重写逻辑
 
+6. **性能对比**
+| 方法     | 时间 (s)    | 说明              |
+| ------ | --------- | --------------- |
+| direct | 0.3845893 | 直接计算            |
+| lookup | 0.5370041 | 查表（预先生成比较结果）    |
+| ratio  | 0.716     | direct / lookup |
+
+
 ---
 
 
-你希望我帮你写这个完整版本吗？
+
